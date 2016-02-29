@@ -1,5 +1,10 @@
 # TeamGOATS
 Zika virus forecast
+ 
+Contact info:
+Kelly Schroeder
+kschroed@bu.edu
+307-399-5248
 
 Emily Chua
 ejchua@bu.edu
@@ -13,3 +18,4 @@ ajpineda@bu.edu
 Andre Schettino
 schettin@bu.edu
 617-784-1217
+
