@@ -7,9 +7,12 @@ library(gtrendsR)
 gconnect("zikaforecast@gmail.com","ge585zika")
 
 #Pulling Google trend data for Colombia from September 2015 to present
-zika_trend=gtrends("zika",geo=c("CO"), start_date= "2015-09-01")
+## Change start date to within the last 3 months to get daily updates (using February 1st, 2016 below)
+zika_trend=gtrends("zika",geo=c("CO"), start_date= "2016-02-01")
 
 plot(zika_trend)
+
+# Actual search numbers per day stored in zika_trend$trend
 
 #make script executable using chmod
 # cron job table
