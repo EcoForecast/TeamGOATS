@@ -11,4 +11,9 @@ zika_trend=gtrends("zika",geo=c("CO"), start_date= "2015-09-01")
 
 plot(zika_trend)
 
+#make script executable using chmod
+# cron job table
+# MAILTO=zikaforecast@gmail.com
+# * * 7 * */home/carya/TeamGOATS/get_googletrends_data.R
+
 
