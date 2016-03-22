@@ -15,8 +15,13 @@ password: ge585zika
 to access shell from terminal (then answer the prompts that come up):
 ssh -i my.key carya@52.24.222.204 
 
-Cronjob file name (under /home/carya/TeamGOATS/):
-cronbuzz (for emily’s script)
+File created by cronjob to show last update time (under /home/carya/TeamGOATS/):
+buzzfeedCronLastUpdate (for emily’s script)
+GoogleTrendsCronLastUpdate (for kelly)
 
-syntax of cron job (for every minute)*still test version:
-01 * * * * Rscript /home/carya/TeamGOATS/get_data.R
+
+syntax of cron job updates every night at midnight:
+0 0 * * * /home/carya/TeamGOATS/get_data.R > cron.log 2>&1
+
+0 0 * * * /home/carya/TeamGOATS/get_googletrends_data.R > cron.log 2>&1
+
