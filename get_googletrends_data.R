@@ -1,3 +1,8 @@
+#!/usr/bin/env Rscript
+.libPaths(c("/home/carya/R/library",.libPaths()))
+.libPaths()
+setwd("/home/carya/TeamGOATS")
+
 #install gtrendsR package that pulls Google trend data
 install.packages("gtrendsR")
 library(gtrendsR)
@@ -20,3 +25,10 @@ plot(zika_trend)
 # * * 7 * */home/carya/TeamGOATS/get_googletrends_data.R
 
 
+#check if the cron job is running
+file_before= file("GoogleTrendsCronLastUpdate")
+cat("JAG IS UP AND RUNNING",date(),file= file_before, append=TRUE)
+close(file_before)
+
+save.image("googleZika.RData")
+#save
