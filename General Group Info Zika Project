@@ -1,0 +1,22 @@
+Zika Project (general information):
+
+server address: http://52.24.222.204/TeamGOATS/
+
+server opened through rstudio: http://52.24.222.204/rstudio/
+	username: carya
+	password: illinois
+
+
+
+general group email:
+username: zikaforecast@gmail.com
+password: ge585zika
+
+to access shell from terminal (then answer the prompts that come up):
+ssh -i my.key carya@52.24.222.204 
+
+Cronjob file name (under /home/carya/TeamGOATS/):
+cronbuzz (for emily’s script)
+
+syntax of cron job (for every minute)*still test version:
+01 * * * * Rscript /home/carya/TeamGOATS/get_data.R
