@@ -57,15 +57,18 @@ for(i in 1:length(update)){
   #write.csv(datafile,file=myfile)
 }
 
+# Divide up totals by department
 num.depts = length(levels(data[[1]][,1]))
-dept.total = matrix(data=NA,nrow=num.depts,ncol=length(update))
-#dept.total[,1] = levels(data[[1]][,1]) # Tried to make the 1st column the name of the department, but this changes all the numbers to characters
-for(i in 2:length(update)){
-  dept.total[,i] = tapply(data[[i]]$zika_total,data[[i]]$department,FUN=sum) # divide up totals by department
+dept.names = levels(data[[1]][,1])
+dept.total = data.frame(matrix(data=NA,nrow=length(update),ncol=num.depts))
+rownames(dept.total) = update
+colnames(dept.total) = dept.names
+for(i in 1:length(update)){
+  dept.total[i,] = tapply(data[[i]]$zika_total,data[[i]]$department,FUN=sum) 
 }    
 dept.total
 for(i in 1:num.depts){
-  plot(dept.total[i,],main=i)
+  plot(as.factor(update),dept.total[,i],main=colnames(dept.total)[i],las=1,xlab="Time",ylab="Total confirmed and suspected cases")
 }
 
 jpeg("web/Cases.jpg")
