@@ -1,3 +1,30 @@
+## Included get_data.R and get_googletrends_data.R to have everything in once place
+
+## Google Trends Data (get_googletrends_data.R)
+
+setwd("/home/carya/TeamGOATS")
+
+#install gtrendsR package that pulls Google trend data
+install.packages("gtrendsR")
+library(gtrendsR)
+
+#Data Source: Google Zika Trends (https://www.google.com/trends/explore#q=zika&geo=CO&date=9%2F2015%207m&cmpt=q&tz=Etc%2FGMT%2B5)
+
+gconnect("zikaforecast@gmail.com","ge585zika")
+
+#Pulling Google trend data for Colombia from September 2015 to present
+## Change start date to within the last 3 months to get daily updates (using February 1st, 2016 below)
+zika_trend.old=gtrends("zika",geo=c("CO"), start_date="2015-11-01",end_date= "2016-01-31")
+zika_trend=gtrends("zika",geo=c("CO"), start_date= "2016-02-01")
+
+zika = rbind(zika_trend.old$trend,zika_trend$trend)
+plot(zika)
+
+save.image("googleZika.RData")
+#######################################################################################
+
+
+## Buzzfeed Data (get_data.R)
 #!/usr/bin/env Rscript
 .libPaths(c("/home/carya/R/library",.libPaths()))
 .libPaths()
@@ -56,50 +83,37 @@ for(i in 1:length(update)){
   #datafile = read.csv(paste0(raw.path,"/",muni_data[i,2]))
   #write.csv(datafile,file=myfile)
 }
-
-# Divide up totals by department
-num.depts = length(levels(data[[1]][,1]))
-dept.names = levels(data[[1]][,1])
-dept.total = data.frame(matrix(data=NA,nrow=length(update),ncol=num.depts))
-rownames(dept.total) = update
-colnames(dept.total) = dept.names
-for(i in 1:length(update)){
-  dept.total[i,] = tapply(data[[i]]$zika_total,data[[i]]$department,FUN=sum) 
-}    
-dept.total
-for(i in 1:num.depts){
-  plot(as.factor(update),dept.total[,i],main=colnames(dept.total)[i],las=1,xlab="Time",ylab="Total confirmed and suspected cases")
-}
-
 jpeg("web/Cases.jpg")
 plot(update,total,xlab="Time",ylab="Total confirmed and suspected")
 dev.off()
-#barplot(as.vector(total),names.arg=update,xlab="Time",ylab="Total confirmed and suspected cases")
-
-#############################################################################################
-# TRY LATER: Only downloading new data
-# If a new data file has been added, download it
-#if(length(update) > length(update.old)) {
-  ## Create a subset of the FIA reference table which includes only the files that were updated more recently than our specified download date
-  #new_data = muni_data[which(update > update.old),] # Only include files updated more recently than our last download date
-  # Pull the data off the web
-  ## Loop over the files in our subsetted reference table and grab these files off the website 
-  #raw.data = "https://raw.githubusercontent.com/BuzzFeedNews/zika-data/master/data/parsed/colombia"
-  #total <- matrix(data=NA,nrow=nrow(new_data))
-  #for(i in 1:nrow(new_data)){
-    #data = read.csv(paste0(raw.data,"/",new_data[i,2]))
-    #total[i] = sum(data[,"zika_total"])
-  #}
-#}
-#############################################################################################
-#check if the cron job is running
-file_before= file("buzzfeedCronLastUpdate")
-cat("JAG IS UP AND RUNNING",date(),file= file_before, append=TRUE)
-close(file_before)
 
 
 save.image("zika.RData")
 #save
 
-### Later, once server is working, need to make this script executable by using chmod
-# Cron job directory: /home/carya/TeamGOATS/get_data.R
+time = update
+y = as.integer(total)
+#######################################################################################
+
+## Combine Buzzfeed and Google Trends data 
+
+# Create new column for buzzfeed data
+x = NA
+new.column = rep(x,times = 146)
+# Create new matrix with both data sources
+combined.data = cbind(zika,new.column)
+colnames(combined.data) = c("Date","Searches","Cases")
+google.time = as.Date(combined.data$Date)
+combined.data[,1] = google.time
+search.sum = cumsum(combined.data$Searches) # Make google data sum up to match format of buzzfeed data
+combined.data[,2] = search.sum
+# Add buzzfeed data to combined.data matrix
+for(i in 1:146){
+  for(j in 1:7){
+    if(combined.data$Date[i] == time[j]) {
+      combined.data$Cases[i] = total[j] # Add buzzfeed data in when dates match, the rest are NA
+    } 
+  }
+}
+
+
