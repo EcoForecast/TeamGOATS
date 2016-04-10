@@ -10,28 +10,34 @@ RandomWalk = "
 model{
 
 #### Data Model
-for(i in 1:n){
-#y[i] ~ dnorm(x[i],tau_obs)
-mu[i] <- exp(x[i])  #back on linear scale
-#y[i]~dpois(mu[i])
-dept.total[i]~dpois(mu[i])
-ypred[i]~dpois(mu[i])
+for(i in 1:nd){
+  for(t in 1:nt){
+    #y[i] ~ dnorm(x[i],tau_obs)
+    mu[t,i] <- exp(x[t,i])  #back on linear scale
+    #y[i]~dpois(mu[i])
+    dept.total[t,i]~dpois(mu[t,i])
+    ypred[t,i]~dpois(mu[t,i])
+   }
 }
 
 # if dividing data by department (counts), use poisson (parameter is mean background number; need to unlog x; no tau_obs) for data model.  (Could also use negative binomial)
 
 #### Process Model
-for(i in 2:n){
-z[i] = x[i-1] + r + dept[i]
-x[i]~dnorm(z[i],tau_add)
+for(i in 1:nd){
+  for(t in 2:nt){
+    z[t,i] = x[t-1,i] + r + dept[i]
+    x[t,i]~dnorm(z[t,i],tau_add)
+  }
+  #### Departmental effect
+  dept[i] ~ dnorm(0,tau_dept)
 }
 
-#### Departmental effect
-dept[i] ~ dnorm(0,tau_dept)
 
 #### Priors
-x[1] ~ dnorm(x_ic,tau_ic)
-#tau_obs ~ dgamma(a_obs,r_obs)
+for(i in 1:nd){
+  x[1,i] ~ dnorm(x_ic,tau_ic)
+}
+tau_obs ~ dgamma(a_obs,r_obs)
 tau_add ~ dgamma(a_add,r_add)
 tau_dept ~ dgamma(a_dept,r_dept)
 r ~ dnorm(0,0.02)
@@ -39,13 +45,13 @@ r ~ dnorm(0,0.02)
 "
 
 #data <- list(y=y,n=length(y),x_ic=log(10000),tau_ic=1,a_add=1,r_add=1)#a_obs=1,r_obs=1
-data <- list(dept.total=dept.total,n=length(dept.total),x_ic=log(10000),tau_ic=1,a_add=1,r_add=1)#a_obs=1,r_obs=1
+data <- list(dept.total=dept.total,nd=ncol(dept.total),nt=nrow(dept.total),x_ic=log(10000),tau_ic=1,a_add=1,r_add=1,a_obs=1,r_obs=1,r_dept=1,a_dept=1)
 
 nchain = 3
 init <- list()
 for(i in 1:nchain){
   y.samp = sample(dept.total,length(dept.total),replace=TRUE)
-  init[[i]] <- list(tau_add=1/var(diff(log(y.samp))))#,tau_obs=5/var(log(y.samp)))
+  init[[i]] <- list(tau_add=1/var(as.vector(apply(y.samp,2,diff))))#,tau_obs=5/var(log(y.samp)))
 }
 
 j.model   <- jags.model (file = textConnection(RandomWalk),
