@@ -1,6 +1,6 @@
 library(rjags)
 
-load("zika.Rdata")
+load("zika.RData")
 
 #time = update
 #y = as.integer(total)
