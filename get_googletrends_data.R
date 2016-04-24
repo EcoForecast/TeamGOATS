@@ -13,9 +13,11 @@ gconnect("zikaforecast@gmail.com","ge585zika")
 
 #Pulling Google trend data for Colombia from September 2015 to present
 ## Change start date to within the last 3 months to get daily updates (using February 1st, 2016 below)
+zika_trend.old=gtrends("zika",geo=c("CO"), start_date="2015-11-01",end_date= "2016-01-31")
 zika_trend=gtrends("zika",geo=c("CO"), start_date= "2016-02-01")
 
-plot(zika_trend)
+zika = rbind(zika_trend.old$trend,zika_trend$trend)
+plot(zika)
 
 # Actual search numbers per day stored in zika_trend$trend
 
@@ -24,7 +26,6 @@ plot(zika_trend)
 # MAILTO=zikaforecast@gmail.com
 # * * 7 * */home/carya/TeamGOATS/get_googletrends_data.R
 
-
 #check if the cron job is running
 file_before= file("GoogleTrendsCronLastUpdate")
 cat("JAG IS UP AND RUNNING",date(),file= file_before, append=TRUE)
@@ -32,3 +33,4 @@ close(file_before)
 
 save.image("googleZika.RData")
 #save
+
