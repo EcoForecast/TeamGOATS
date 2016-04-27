@@ -1,7 +1,7 @@
 i=5 #department (choose whichever has most/best data)
-rand=sample.int(nmc,nmcmn)
+rand=sample.int(nmc,nmcmc)
 
-for (k in 1:nmn){
+for (k in 1:nmc){
   m=rand[k]
   xf[t,i,k] = x[time] #setting initial conditions --> first time from MCMC, later from analysis
   for(t in start:end){
