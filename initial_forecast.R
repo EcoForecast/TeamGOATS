@@ -1,12 +1,28 @@
+<<<<<<< HEAD
 i=5 #department (choose whichever has most/best data)
 rand=sample.int(nmc,nmcmc)
 
+=======
+i=1 #department (choose whichever has most/best data)
+
+nmc = 10 # 1000 to 5000
+nmcmc = nrow(out) # = rows in out
+rand=sample.int(nmcmc,nmc)
+start = 8
+end=10
+xf = array(NA,dim = c(end,1,nmc))
+x = out[,grep("x[7,1]",colnames(out),fixed=TRUE)]
+r = out[,grep("r",colnames(out),fixed=TRUE)]
+dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
+tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
+
+>>>>>>> 42e89bbf728c32fe504d5d6103ce8bf34439465e
 for (k in 1:nmc){
   m=rand[k]
-  xf[t,i,k] = x[time] #setting initial conditions --> first time from MCMC, later from analysis
+  xf[7,i,k] = x[m] #setting initial conditions --> first time from MCMC, later from analysis
   for(t in start:end){
-    z[t,i,k] = xf[t,i,k]+ r[m] + dept[i,m]
-    xf[t,i,k] = rnorm(z[t,i,k],tau_add[m])
+    z = xf[t-1,i,k]+ r[m] + dept[m]
+    xf[t,i,k] = rnorm(1,z,tau_add[m])
   }
 }
 

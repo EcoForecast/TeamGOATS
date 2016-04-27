@@ -2,9 +2,9 @@ library(rjags)
 
 load("zika.RData")
 
-#time = update
-#y = as.integer(total)
-#plot(time,y,type='l',ylab="Zika Index",lwd=2,log='y')
+time = update
+y = as.integer(total)
+plot(time,y,type='l',ylab="Zika Index",lwd=2,log='y')
 
 RandomWalk = "
 model{
@@ -67,7 +67,7 @@ plot(jags.out)
 
 # Now that the model has converged we'll want to take a much larger sample from the MCMC and include the full vector of X's in the output
 jags.out   <- coda.samples (model = j.model,
-                            variable.names = c("x","ypred","tau_add","tau_obs"),
+                            variable.names = c("x","ypred","tau_add","tau_obs","r","dept"),
                             n.iter = 10000)
 
 
@@ -81,6 +81,7 @@ ciEnvelope <- function(x,ylo,yhi,...){
 out <- as.matrix(jags.out)
 ci <- apply(exp(out[,grep("x",colnames(out))]),2,quantile,c(0.025,0.5,0.975))
 pi <- apply(out[,grep("ypred",colnames(out))],2,quantile,c(0.025,0.5,0.975))
+
 
 plot(time,ci[2,],type='n',ylim=range(pi,na.rm=TRUE),ylab="Zika Index",log='y')
 ciEnvelope(time,pi[1,],pi[3,],col="lightBlue")
