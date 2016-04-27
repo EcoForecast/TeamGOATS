@@ -12,9 +12,7 @@ model{
 #### Data Model
 for(i in 1:nd){
   for(t in 1:nt){
-    #y[i] ~ dnorm(x[i],tau_obs)
     mu[t,i] <- exp(x[t,i])  #back on linear scale
-    #y[i]~dpois(mu[i])
     dept.total[t,i]~dpois(mu[t,i])
     ypred[t,i]~dpois(mu[t,i])
    }
@@ -44,7 +42,6 @@ r ~ dnorm(0,0.02)
 }
 "
 
-#data <- list(y=y,n=length(y),x_ic=log(10000),tau_ic=1,a_add=1,r_add=1)#a_obs=1,r_obs=1
 data <- list(dept.total=dept.total,nd=ncol(dept.total),nt=nrow(dept.total),x_ic=log(10000),tau_ic=1,a_add=1,r_add=1,a_obs=1,r_obs=1,r_dept=1,a_dept=1)
 
 nchain = 3
@@ -78,17 +75,17 @@ out <- as.matrix(jags.out)
 ci <- apply(exp(out[,grep("x",colnames(out))]),2,quantile,c(0.025,0.5,0.975))
 pi <- apply(out[,grep("ypred",colnames(out))],2,quantile,c(0.025,0.5,0.975))
 
+for(i in 1:36){
+plot(time,ci[2,(1:7)+(i-1)*7],xlab="Time",ylab="Zika Index",main=colnames(dept.total[i]),ylim=range(pi[,(1:7)+(i-1)*7]))
+ciEnvelope(time,pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
+ciEnvelope(time,ci[1,(1:7)+(i-1)*7],ci[3,(1:7)+(i-1)*7],col="Blue")
+points(time,ci[2,(1:7)+(i-1)*7],ylab="Zika Index")
+}
 
-plot(time,ci[2,],type='n',ylim=range(pi,na.rm=TRUE),ylab="Zika Index",log='y')
-ciEnvelope(time,pi[1,],pi[3,],col="lightBlue")
-ciEnvelope(time,ci[1,],ci[3,],col="Blue")
-points(dept.total,pch="+",cex=0.5)
 
-plot(time,ci[2,],type='n',ylim=range(ci,na.rm=TRUE),ylab="Zika Index")
-ciEnvelope(time,ci[1,],ci[3,],col="lightBlue")
-points(dept.total,pch="+",cex=0.5)
 
-#https://github.com/BuzzFeedNews/zika-data/tree/master/data/parsed/colombia
+
+
 
 
 
