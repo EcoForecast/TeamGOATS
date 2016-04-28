@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 i=5 #department (choose whichever has most/best data)
 rand=sample.int(nmc,nmcmc)
 
@@ -8,7 +9,50 @@ for (k in 1:nmn){
     z[t,i,k] = xf[t,i,k]+ r[m] + dept[i,m]
     xf[t,i,k] = rnorm(z[t,i,k],tau_add[m])
   }
+=======
+#i=1 #department (choose whichever has most/best data)
+
+nmc = 5000 # 1000 to 5000
+nmcmc = nrow(out) # = rows in out
+rand=sample.int(nmcmc,nmc)
+start = 8
+end=10
+
+for(i in 1:36){  
+xf = array(NA,dim = c(end,i,nmc))
+
+x = out[,grep("x[7,1]",colnames(out),fixed=TRUE)] #fix so this "x[7,1]" is not hard coded
+r = out[,grep("r",colnames(out),fixed=TRUE)]
+dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
+tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
+  
+
+   for (k in 1:nmc){
+      m=rand[k]
+      xf[7,i,k] = x[m] #setting initial conditions --> first time from MCMC, later from analysis
+      for(t in start:end){
+        z = xf[t-1,i,k]+ r[m] + dept[m]
+        xf[t,i,k] = rnorm(1,z,tau_add[m])
+        }
+   }
+
+ci = apply(xf[,i,],2,quantile,c(0.025,0.5,0.975),na.rm=TRUE)
+plot(time,ci[2,(start:end)+(i-1)*7],xlab="Time",ylab="Estimated Cases",
+     main=colnames(dept.total[i]),ylim=range(pi[,(start:end)+(i-1)*7]))
+ciEnvelope(time,ci[1,(start:end)+(i-1)*7],ci[3,(start:end)+(i-1)*7],col="Blue")
+points(time,ci[2,(start:end)+(i-1)*7],ylab="Estimated Cases")
+>>>>>>> b31a2dd0a0a34fdb1ec822a163f72a2ee15c1d55
 }
+
+
+
+#sensitivity and uncertainty 
+
+## do analysis
+muf = mean()
+Pf = var()
+KF Math
+x = sample from rnorm(ne,mua,pa)
 
 #note: modeling x on a log scale
 
