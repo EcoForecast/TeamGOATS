@@ -6,7 +6,7 @@ rand=sample.int(nmcmc,nmc)
 start = 8
 end=10
 xf = array(NA,dim = c(end,1,nmc))
-x = out[,grep("x[7,1]",colnames(out),fixed=TRUE)]
+x = out[,grep("x[7,1]",colnames(out),fixed=TRUE)] # use paste to not hardcode
 r = out[,grep("r",colnames(out),fixed=TRUE)]
 dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
 tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
