@@ -5,16 +5,11 @@ nmcmc = nrow(out) # = rows in out
 rand=sample.int(nmcmc,nmc)
 start = 8
 end=10
-<<<<<<< HEAD
-xf = array(NA,dim = c(end,1,nmc))
-x = out[,grep("x[7,1]",colnames(out),fixed=TRUE)] # use paste to not hardcode
-=======
+
+xf = array(NA,dim = c(end,36,nmc))
 
 for(i in 1:36){  
-xf = array(NA,dim = c(end,i,nmc))
-
 x = out[,grep("x[7,1]",colnames(out),fixed=TRUE)] #fix so this "x[7,1]" is not hard coded
->>>>>>> b31a2dd0a0a34fdb1ec822a163f72a2ee15c1d55
 r = out[,grep("r",colnames(out),fixed=TRUE)]
 dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
 tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
@@ -28,15 +23,16 @@ tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
         xf[t,i,k] = rnorm(1,z,tau_add[m])
         }
    }
-
-ci = apply(xf[,i,],2,quantile,c(0.025,0.5,0.975),na.rm=TRUE)
-plot(time,ci[2,(start:end)+(i-1)*7],xlab="Time",ylab="Estimated Cases",
-     main=colnames(dept.total[i]),ylim=range(pi[,(start:end)+(i-1)*7]))
-ciEnvelope(time,ci[1,(start:end)+(i-1)*7],ci[3,(start:end)+(i-1)*7],col="Blue")
-points(time,ci[2,(start:end)+(i-1)*7],ylab="Estimated Cases")
 }
 
-
+x=seq(1,end,1) # Time vector 
+ci=array(NA,dim=c(3,end,36))
+for(i in 1:36){
+ci[,,i] <- apply(exp(xf[,i,]),1,quantile,c(0.025,0.5,0.975),na.rm=TRUE)
+plot(ci[2,,i],ylim=range(ci[,,i],na.rm=TRUE),xlab="Day",ylab="Total Cases",main=colnames(dept.total[i]))
+ciEnvelope(x,ci[1,,i],ci[3,,i],col="lightBlue")
+points(ci[2,,i])
+}
 
 #sensitivity and uncertainty 
 
