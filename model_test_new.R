@@ -1,6 +1,6 @@
 library(rjags)
 
-load("zika.Rdata")
+load("zika.RData")
 
 time = update
 y = as.integer(total)
@@ -94,5 +94,17 @@ points(dept.total,pch="+",cex=0.5)
 
 #https://github.com/BuzzFeedNews/zika-data/tree/master/data/parsed/colombia
 
+## Initial forecast
+i=5 #department (choose whichever has most/best data)
+nmc = 5000
+rand=sample.int(nmc,nmcmc)
 
+for (k in 1:nmc){
+  m=rand[k]
+  xf[t,i,k] = x[t,i,k] #setting initial conditions --> first time from MCMC, later from analysis
+  for(t in start:end){
+    z[t,i,k] = xf[t,i,k]+ r[m] + dept[i,m]
+    xf[t,i,k] = rnorm(z[t,i,k],tau_add[m])
+  }
+}
 
