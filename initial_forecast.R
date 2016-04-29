@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-i=5 #department (choose whichever has most/best data)
-rand=sample.int(nmc,nmcmc)
-
-=======
 i=1 #department (choose whichever has most/best data)
 
-nmc = 10 # 1000 to 5000
+nmc = 1000 # 1000 to 5000
 nmcmc = nrow(out) # = rows in out
 rand=sample.int(nmcmc,nmc)
 start = 8
@@ -16,8 +11,10 @@ r = out[,grep("r",colnames(out),fixed=TRUE)]
 dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
 tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
 
->>>>>>> 42e89bbf728c32fe504d5d6103ce8bf34439465e
+
+  #dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
 for (k in 1:nmc){
+  #random samples from MCMC output
   m=rand[k]
   xf[7,i,k] = x[m] #setting initial conditions --> first time from MCMC, later from analysis
   for(t in start:end){
@@ -25,6 +22,7 @@ for (k in 1:nmc){
     xf[t,i,k] = rnorm(1,z,tau_add[m])
   }
 }
+
 
 #note: modeling x on a log scale
 
