@@ -55,7 +55,7 @@ plot(jags.out)
 
 # Now that the model has converged we'll want to take a much larger sample from the MCMC and include the full vector of X's in the output
 jags.out   <- coda.samples (model = j.model,
-                            variable.names = c("x","ypred","tau_add","tau_obs"),
+                            variable.names = c("x","ypred","tau_add"),#,"tau_obs"), # No tau_obs if using dpois for Data Model
                             n.iter = 10000)
 
 ciEnvelope <- function(x,ylo,yhi,...){
