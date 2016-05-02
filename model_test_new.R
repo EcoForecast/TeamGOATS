@@ -67,6 +67,10 @@ jags.out   <- coda.samples (model = j.model,
                             variable.names = c("x","ypred","tau_add","tau_obs","r","dept"),
                             n.iter = 10000)
 
+
+
+
+#####################
 ciEnvelope <- function(x,ylo,yhi,...){
   polygon(cbind(c(x, rev(x), x[1]), c(ylo, rev(yhi),
                                       ylo[1])), border = NA,...) 

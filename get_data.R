@@ -30,7 +30,7 @@ print("loaded packages")
 load("zika.RData")
 update.old = update
 
-data.repo = "https://github.com/BuzzFeedNews/zika-data/tree/master/data/parsed/colombia"
+  data.repo = "https://github.com/BuzzFeedNews/zika-data/tree/master/data/parsed/colombia"
 
 # Scrape Github for new data
 ## Grab raw html
@@ -96,7 +96,6 @@ dev.off()
 file_before= file("buzzfeedCronLastUpdate")
 cat("JAG IS UP AND RUNNING",date(),file= file_before, append=TRUE)
 close(file_before)
-
 
 save.image("zika.RData")
 #save

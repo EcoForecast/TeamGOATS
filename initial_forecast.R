@@ -1,6 +1,10 @@
 #i=1 #department (choose whichever has most/best data)
 
+<<<<<<< HEAD
+nmc = 1000 # 1000 to 5000
+=======
 nmc = 5000 # 1000 to 5000
+>>>>>>> a551a3d3adddbca27eca940927b58aae610eedb2
 nmcmc = nrow(out) # = rows in out
 rand=sample.int(nmcmc,nmc)
 start = 8
@@ -25,6 +29,20 @@ tau_add = out[,grep("tau_add",colnames(out),fixed=TRUE)]
    }
 }
 
+<<<<<<< HEAD
+
+  #dept = out[,grep("dept[1]",colnames(out),fixed=TRUE)]
+for (k in 1:nmc){
+  #random samples from MCMC output
+  m=rand[k]
+  xf[7,i,k] = x[m] #setting initial conditions --> first time from MCMC, later from analysis
+  for(t in start:end){
+    z = xf[t-1,i,k]+ r[m] + dept[m]
+    xf[t,i,k] = rnorm(1,z,tau_add[m])
+  }
+}
+
+=======
 #data=apply(exp(out[,grep("x",colnames(out))]),2,quantile,c(0.025,0.5,0.975))
 x=seq(1,end,1) # Time vector 
 ci.f=array(NA,dim=c(3,end,36))
@@ -37,7 +55,7 @@ points(ci.f[2,,i])
 
 time.f=seq(1,end,1)
 for(i in 1:36){
-  plot(time.f,c(ci[2,(1:7)+(i-1)*7],ci.f[2,start:end,i]),xlab="Time",ylab="Zika Index",main=colnames(dept.total[i]),ylim=0.25*range(ci.f[,,i],na.rm=TRUE))
+  plot(time.f,c(ci[2,(1:7)+(i-1)*7],ci.f[2,start:end,i]),xlab="Time",ylab="Zika Index",main=colnames(dept.total[i]),ylim=0.5*range(ci.f[,,i],na.rm=TRUE))
   #ciEnvelope(time,pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
   ciEnvelope(time.f[1:(start-1)],pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
   #ciEnvelope(time.f,c(ci[1,(1:7)+(i-1)*7],ci.f[1,,i]),c(ci[3,(1:7)+(i-1)*7],ci.f[3,,i]),col="Blue")
@@ -52,6 +70,7 @@ muf = mean()
 Pf = var()
 KF Math
 x = sample from rnorm(ne,mua,pa)
+>>>>>>> a551a3d3adddbca27eca940927b58aae610eedb2
 
 #note: modeling x on a log scale
 
