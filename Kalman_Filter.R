@@ -1,4 +1,3 @@
-################################################################################
 ## Code from Kalman Filter exercise
 
 KalmanFilter <- function(M,mu0,P0,Q,R,Y){

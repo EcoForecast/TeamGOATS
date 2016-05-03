@@ -55,33 +55,4 @@ for(i in 1:36){
   Y[i,] = xf[,i,sample.int(nmc,1)]
 }
 
-## do analysis
-mu.f = apply(xf[start,,],1,mean)
-P.f = var(t(xf[start,,]))
-I = diag(1,36)
-R = diag(mean(tau_obs),36)
-#KF Math
-
-## Analysis step: combine previous forecast with observed data
-obs = !is.na(Y[,start]) ## which Y's were observed?
-if(any(obs)){
-  H <- I[obs,]                                                        ## observation matrix
-  K <- P.f %*% t(H) %*% solve(H%*%P.f%*%t(H) + R[obs,obs])  ## Kalman gain
-  mu.a <- mu.f + K%*%(Y[obs,start] - H %*% mu.f)              ## update mean
-  P.a <- (1-K %*% H)*P.f                                  ## update covariance
-} else {
-  ##if there's no data, the posterior is the prior
-  mu.a = mu.f
-  P.a = P.f
-}
-
-
-x = rmvnorm(nmc,mu.a,P.a)
-
-#note: modeling x on a log scale
-
-#iterative forecast will be basically this same code, just different start point that has different posterior (from analysis)
-
-#in anaysis: choice btw PF and EnKF
-  #PF - likelihood to calculate weights, resample using weights
-  #EnKF- calculate forecast mean and forecast covariance, apply math from KF analysis, sample from that 
+### STOP HERE, GO TO ENKF.R ####
