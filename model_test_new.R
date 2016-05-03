@@ -81,8 +81,8 @@ ci <- apply(exp(out[,grep("x",colnames(out))]),2,quantile,c(0.025,0.5,0.975))
 pi <- apply(out[,grep("ypred",colnames(out))],2,quantile,c(0.025,0.5,0.975))
 
 for(i in 1:36){
-  plot(time,ci[2,(1:7)+(i-1)*7],xlab="Time",ylab="Zika Index",main=colnames(dept.total[i]),ylim=range(pi[,(1:7)+(i-1)*7]))
+  plot(time,ci[2,(1:7)+(i-1)*7],xlab="Time",ylab="Total Zika Cases",main=colnames(dept.total[i]),ylim=range(pi[,(1:7)+(i-1)*7]))
   ciEnvelope(time,pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
   ciEnvelope(time,ci[1,(1:7)+(i-1)*7],ci[3,(1:7)+(i-1)*7],col="Blue")
-  points(time,ci[2,(1:7)+(i-1)*7],ylab="Zika Index")
+  points(time,ci[2,(1:7)+(i-1)*7],ylab="Total Zika Cases")
 }
