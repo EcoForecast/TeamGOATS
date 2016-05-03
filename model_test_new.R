@@ -11,29 +11,29 @@ model{
 
 #### Data Model
 for(i in 1:nd){
-  for(t in 1:nt){
-    mu[t,i] <- exp(x[t,i])  #back on linear scale
-    dept.total[t,i]~dpois(mu[t,i])
-    ypred[t,i]~dpois(mu[t,i])
-   }
+for(t in 1:nt){
+mu[t,i] <- exp(x[t,i])  #back on linear scale
+dept.total[t,i]~dpois(mu[t,i])
+ypred[t,i]~dpois(mu[t,i])
+}
 }
 
 # if dividing data by department (counts), use poisson (parameter is mean background number; need to unlog x; no tau_obs) for data model.  (Could also use negative binomial)
 
 #### Process Model
 for(i in 1:nd){
-  for(t in 2:nt){
-    z[t,i] = x[t-1,i] + r + dept[i]
-    x[t,i]~dnorm(z[t,i],tau_add)
-  }
-  #### Departmental effect
-  dept[i] ~ dnorm(0,tau_dept)
+for(t in 2:nt){
+z[t,i] = x[t-1,i] + r + dept[i]
+x[t,i]~dnorm(z[t,i],tau_add)
+}
+#### Departmental effect
+dept[i] ~ dnorm(0,tau_dept)
 }
 
 
 #### Priors
 for(i in 1:nd){
-  x[1,i] ~ dnorm(x_ic,tau_ic)
+x[1,i] ~ dnorm(x_ic,tau_ic)
 }
 tau_obs ~ dgamma(a_obs,r_obs)
 tau_add ~ dgamma(a_add,r_add)
@@ -60,12 +60,17 @@ j.model   <- jags.model (file = textConnection(RandomWalk),
 jags.out   <- coda.samples (model = j.model,
                             variable.names = c("tau_add","r"),
                             n.iter = 1000)
+
 plot(jags.out)
 
 # Now that the model has converged we'll want to take a much larger sample from the MCMC and include the full vector of X's in the output
 jags.out   <- coda.samples (model = j.model,
                             variable.names = c("x","ypred","tau_add","tau_obs","r","dept"),
                             n.iter = 10000)
+
+#jags.out   <- coda.samples (model = j.model,
+#variable.names = c("x","tau_obs","tau_add","tau_dept","r"),
+#n.iter = 10000)
 
 ciEnvelope <- function(x,ylo,yhi,...){
   polygon(cbind(c(x, rev(x), x[1]), c(ylo, rev(yhi),
@@ -76,16 +81,8 @@ ci <- apply(exp(out[,grep("x",colnames(out))]),2,quantile,c(0.025,0.5,0.975))
 pi <- apply(out[,grep("ypred",colnames(out))],2,quantile,c(0.025,0.5,0.975))
 
 for(i in 1:36){
-plot(time,ci[2,(1:7)+(i-1)*7],xlab="Time",ylab="Zika Index",main=colnames(dept.total[i]),ylim=range(pi[,(1:7)+(i-1)*7]))
-ciEnvelope(time,pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
-ciEnvelope(time,ci[1,(1:7)+(i-1)*7],ci[3,(1:7)+(i-1)*7],col="Blue")
-points(time,ci[2,(1:7)+(i-1)*7],ylab="Zika Index")
+  plot(time,ci[2,(1:7)+(i-1)*7],xlab="Time",ylab="Zika Index",main=colnames(dept.total[i]),ylim=range(pi[,(1:7)+(i-1)*7]))
+  ciEnvelope(time,pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
+  ciEnvelope(time,ci[1,(1:7)+(i-1)*7],ci[3,(1:7)+(i-1)*7],col="Blue")
+  points(time,ci[2,(1:7)+(i-1)*7],ylab="Zika Index")
 }
-
-
-
-
-
-
-
-

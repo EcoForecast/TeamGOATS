@@ -83,7 +83,7 @@ for(i in 1:36){
   ciEnvelope(time.f.new[1:(start-1)],pi[1,(1:20)+(i-1)*20],pi[3,(1:20)+(i-1)*20],col="lightBlue")
   #ciEnvelope(time.f,c(ci[1,(1:7)+(i-1)*7],ci.f[1,,i]),c(ci[3,(1:7)+(i-1)*7],ci.f[3,,i]),col="Blue")
   ciEnvelope(time.f.new,ci.f.new[1,,i],ci.f.new[3,,i],col="lightGreen")
-  points(time.f.ew,c(ci[2,(1:20)+(i-1)*20],ci.f[2,start:end.forecast,i]))
+  points(time.f.new,c(ci[2,(1:20)+(i-1)*20],ci.f[2,start:end.forecast,i]))
   points(ci.f.new[2,,i],pch="+",col="darkGreen")
 }
 
