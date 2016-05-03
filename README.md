@@ -1,7 +1,8 @@
 # TeamGOATS
 Zika virus forecast
- 
-Contact info:
+
+######################
+CONTACT INFO
 Kelly Schroeder
 kschroed@bu.edu
 307-399-5248
@@ -21,13 +22,25 @@ Andre Schettino
 schettin@bu.edu
 617-784-1217
 
-CRON SETTINGS:
-All updates emailed to zikaforecast@gmail.com
-
+######################
+DATA
 -Buzzfeed Repo:
-  -Data will be updated weekly, or as it becomes available, and will be stored 
+  -Colombia's Zika data updated weekly from 2016-01-09 to 2016-02-20; stored 
   in the table "total" within get_data.R
 
 -Google Trends:
-   -Data will be updated daily and stored in zika_trends within    
+   -Data updated daily and stored in "zika_trends"" within    
    get_googletrends_data.R 
+   
+CRON SETTINGS
+All updates emailed to zikaforecast@gmail.com
+
+######################
+ORDER OF R SCRIPTS
+1) get_data.R
+2) model_test_new.R
+3) initial_forecast.R
+4) sensitivity_analysis.R
+5) EnKF.R
+
+
