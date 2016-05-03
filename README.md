@@ -29,11 +29,12 @@ DATA
   in the table "total" within get_data.R
 
 -Google Trends:
-   -Data updated daily and stored in "zika_trends"" within    
+  -Data updated daily and stored in "zika_trends"" within    
    get_googletrends_data.R 
+  -NOTE: Did not end up using this data
    
 CRON SETTINGS
-All updates emailed to zikaforecast@gmail.com
+-All updates emailed to zikaforecast@gmail.com
 
 ######################
 ORDER OF R SCRIPTS
