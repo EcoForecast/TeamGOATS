@@ -23,6 +23,7 @@ subcode = countries[countries$code=="CO",]$subcode
 zika_trend = matrix(NA,nrow = length(subcode),ncol=nrow(zika_trend$trend))
 
 for(j in seq_along(subcode)){
+  print(j)
   z=try(gtrends("zika",geo=c(subcode[j]), start_date= "2016-02-01"))
   if(class(z) != "try-error"){
     zika_trend[j,] = z$trend[,2]

@@ -55,13 +55,17 @@ for(i in 1:36){
   Y[i,] = xf[,i,sample.int(nmc,1)]
 }
 
+
 ## do analysis
 mu.f = apply(xf[start,,],1,mean)
 P.f = var(t(xf[start,,]))
 I = diag(1,36)
 R = diag(mean(tau_obs),36)
-#KF Math
 
+##performs KF Math for every subsequent step after the initial date
+for (a in 8:17) {
+  start=a
+#KF Math
 ## Analysis step: combine previous forecast with observed data
 obs = !is.na(Y[,start]) ## which Y's were observed?
 if(any(obs)){
@@ -74,10 +78,9 @@ if(any(obs)){
   mu.a = mu.f
   P.a = P.f
 }
+Y<-cbind(Y,mu.a)
 
+}
 
-<<<<<<< HEAD
 x = rmvnorm(nmc,mu.a,P.a)
-=======
-x = rmvnorm(nmc,mu.a,P.a)
->>>>>>> 940876a7c0ecdf18f40c32738526e7dd7141352e
+
