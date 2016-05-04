@@ -68,7 +68,6 @@ jags.out   <- coda.samples (model = j.model,
                             variable.names = c("x","ypred","tau_add","tau_obs","r","dept"),
                             n.iter = 10000)
 
-#####################
 #jags.out   <- coda.samples (model = j.model,
 #variable.names = c("x","tau_obs","tau_add","tau_dept","r"),
 #n.iter = 10000)
@@ -84,6 +83,6 @@ pi <- apply(out[,grep("ypred",colnames(out))],2,quantile,c(0.025,0.5,0.975))
 for(i in 1:36){
   plot(time,ci[2,(1:7)+(i-1)*7],xlab="Time",ylab="Total Zika Cases",main=colnames(dept.total[i]),ylim=range(pi[,(1:7)+(i-1)*7]))
   ciEnvelope(time,pi[1,(1:7)+(i-1)*7],pi[3,(1:7)+(i-1)*7],col="lightBlue")
-  ciEnvelope(time,ci[1,(1:7)+(i-1)*7],ci[3,(1:7)+(i-1)*7],col="Blue")
+  #ciEnvelope(time,ci[1,(1:7)+(i-1)*7],ci[3,(1:7)+(i-1)*7],col="Blue")
   points(time,ci[2,(1:7)+(i-1)*7],ylab="Total Zika Cases")
 }
